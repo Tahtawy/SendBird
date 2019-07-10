@@ -1,0 +1,15 @@
+{
+  "name": "sendbird-angularjs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "tahtawy <mght29@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "angular": "^1.5.11",
+    "sendbird": "^3.0.103"
+  }
+}

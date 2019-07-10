@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Front</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
+  <link rel="stylesheet" href="./style.css">
+  <script src="./node_modules/angular/angular.min.js"></script>
+</head>
+
+<body>
+  <div ng-app="chatApp" ng-controller="chatCtrl" ng-init="onInit()">
+    <div class="container clearfix">
+
+      <div class="chat">
+        <div class="chat-header clearfix">
+          <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/195612/chat_avatar_01_green.jpg" alt="avatar" />
+
+          <div class="chat-about">
+            <div class="chat-with">Chat with Vincent Porter</div>
+            <div class="chat-num-messages">already 1 902 messages</div>
+          </div>
+          <i class="fa fa-star"></i>
+        </div> <!-- end chat-header -->
+
+        <div class="chat-history">
+          <ul>
+            <li class="clearfix" ng-repeat="uMessage in sentMessages track by $index" ng-if="sentMessages.length > 0">
+              <div class="message-data align-right">
+                <span class="message-data-time">{{time}}, Today</span> &nbsp; &nbsp;
+                <span class="message-data-name">Olia</span> <i class="fa fa-circle me"></i>
+              </div>
+              <div class="message other-message float-right">
+                {{ uMessage }}
+              </div>
+            </li>
+            <li ng-repeat="rMessage in recieveMessages track by $index" ng-if="recieveMessages.length > 0">
+              <div class="message-data">
+                <span class="message-data-name"><i class="fa fa-circle online"></i> Vincent</span>
+                <span class="message-data-time">{{time}}, Today</span>
+              </div>
+              <div class="message my-message">
+                {{ rMessage }}
+              </div>
+            </li>
+          </ul>
+
+        </div> <!-- end chat-history -->
+
+        <div class="chat-message clearfix">
+          <textarea ng-model="message" name="message-to-send" id="message-to-send" placeholder="Type your message"
+            rows="3"></textarea>
+
+          <!-- <i class="fa fa-file-o"></i> &nbsp;&nbsp;&nbsp;
+            <i class="fa fa-file-image-o"></i> -->
+
+          <button ng-click="sendMessage()" class="send_btn">Send</button>
+
+        </div> <!-- end chat-message -->
+
+      </div> <!-- end chat -->
+
+    </div> <!-- end container -->
+
+  </div>
+  <script src="./node_modules/sendbird/SendBird.min.js"></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script src="./script.js"></script>
+</body>
+
+</html>
