@@ -30,9 +30,12 @@ app.controller('chatCtrl', function ($scope) {
     // Set Axios Token.
     axios.defaults.headers.common['Api-Token'] = appToken;
 
-    // Create Mobile User.
-    axios.post(`https://api-${appId}.sendbird.com/v3/users`, mobileUser).then(function (response) {
-      console.log(response);
+    // Check if user Exsists
+    axios.get(`https://api-${appId}.sendbird.com/v3/users/NewMobileUser`).then(function (response) {
+    }).catch(function (error) {
+      if (error.response.data.message === 'User not found.')
+        // Create Mobile User.
+        axios.post(`https://api-${appId}.sendbird.com/v3/users`, mobileUser);
     });
 
     // Connect To Server.
@@ -40,12 +43,14 @@ app.controller('chatCtrl', function ($scope) {
       if (error) {
         return;
       }
+      
       // Create Distinct Private Group Channel.
       var params = new mobileSDK.GroupChannelParams();
       params.isPublic = false;
       params.isDistinct = true;
       params.is_access_code_required = false;
-      params.addUserIds(['NewMobileUser']);
+      params.auto_accept = false;
+      params.addUserIds(['NewMobileUser', 'NewFrontUser']);
       params.name = 'EMR_GROUP_CHANNEL';
       params.channelUrl = 'EMR_GROUP_CHANNEL';
       mobileSDK.GroupChannel.createChannel(params, function (groupChannel, error) {
@@ -55,6 +60,7 @@ app.controller('chatCtrl', function ($scope) {
 
         distinctGroup = groupChannel;
         groupChannel.inviteWithUserIds(['NewFrontUser'], function (response, error) {
+          alert('invite')
           if (error) {
             return;
           }
@@ -70,6 +76,7 @@ app.controller('chatCtrl', function ($scope) {
       }
       $scope.sentMessages.push(message.message);
       $scope.$apply();
+      $scope.message = '';
     });
   }
 });

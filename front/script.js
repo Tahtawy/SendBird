@@ -30,10 +30,10 @@ app.controller('chatCtrl', function ($scope) {
     };
     // Handel Recieve Invitation.
     ChannelHandler.onUserReceivedInvitation = function (groupChannel, inviter, invitees) {
+      alert('dd')
       distinctGroup = groupChannel;
       groupChannel.acceptInvitation(function (response, error) {
         if (error) {
-          console.log('error', error);
           return;
         }
         alert('success');
@@ -41,9 +41,12 @@ app.controller('chatCtrl', function ($scope) {
     }
     frontSDK.addChannelHandler('onMessageReceived', ChannelHandler);
 
-    // Create Front User.
-    axios.post(`https://api-${appId}.sendbird.com/v3/users`, frontUser).then(function (response) {
-      console.log(response);
+    // Check if user Exsists
+    axios.get(`https://api-${appId}.sendbird.com/v3/users/NewFrontUser`).then(function (response) {
+    }).catch(function (error) {
+      if (error.response.data.message === 'User not found.')
+        // Create Front User.
+        axios.post(`https://api-${appId}.sendbird.com/v3/users`, frontUser);
     });
 
     // Connect To Server.
@@ -51,17 +54,24 @@ app.controller('chatCtrl', function ($scope) {
       if (error) {
         return;
       }
-      console.log('connect');
+      
+    });
+    frontSDK.setChannelInvitationPreference(false, function(response, error) {
+      if (error) {
+        return;
+      }
     });
   }
 
   $scope.sendMessage = function () {
+    console.log(distinctGroup);
     distinctGroup.sendUserMessage($scope.message, function (message, error) {
       if (error) {
         return;
       }
       $scope.sentMessages.push(message.message);
       $scope.$apply();
+      $scope.message = '';
     });
   }
 });
